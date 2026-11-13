@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "NetVote backend",
+      "request": "launch",
+      "mainClass": "backend.Main",
+      "cwd": "${workspaceFolder}",
+      "args": "8080 admin123"
+    }
+  ]
+}
