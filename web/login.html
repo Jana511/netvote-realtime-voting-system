@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in – NetVote</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f6fde%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2213%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3ENV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <div class="login-wrap">
+      <div class="page-head" style="text-align:center">
+        <h1>Join the poll</h1>
+        <p>Choose a username to take part.</p>
+      </div>
+
+      <section class="card">
+        <div class="role-tabs" role="tablist">
+          <button id="tabVoter" type="button" class="on" role="tab">Voter</button>
+          <button id="tabAdmin" type="button" role="tab">Administrator</button>
+        </div>
+
+        <form id="loginForm" autocomplete="off" novalidate>
+          <label>Username
+            <input id="username" type="text" maxlength="20" placeholder="e.g. kasun_21" required>
+          </label>
+          <p class="small muted" style="margin:-6px 0 12px">2–20 letters, digits or underscores.</p>
+          <label id="pwRow" class="hidden">Admin password
+            <input id="password" type="password" placeholder="Administrator password">
+          </label>
+          <button id="loginBtn" type="submit" class="primary">Connect as voter</button>
+          <p id="loginError" class="error" role="alert"></p>
+        </form>
+
+        <p class="hint">
+          The administrator password is set when the server is started (default <b>admin123</b>).
+          Tip: each browser tab is a separate login, so you can open a second tab and log in
+          with another name to test with several users.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

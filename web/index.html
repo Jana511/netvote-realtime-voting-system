@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NetVote – Real-Time Networked Polling &amp; Voting System</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f6fde%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2213%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3ENV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <!-- hero -->
+    <section class="hero">
+      <div>
+        <h1>Vote together, see results instantly.</h1>
+        <p>NetVote is a real-time polling system for classrooms, clubs and meetings.
+           The administrator starts a poll, everyone votes from their own computer or phone,
+           and the results update live on every screen.</p>
+        <div class="row">
+          <a id="heroMain" class="btn light" href="login.html">Join a poll</a>
+          <a class="btn ghost" style="color:#fff;border-color:#ffffff55" href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="live-card">
+        <h2 id="liveLabel">Current poll</h2>
+        <div id="liveQ" class="q">No poll is running right now.</div>
+        <div id="liveBars" class="results"></div>
+        <p id="liveMeta" class="small" style="opacity:.8;margin:12px 0 0"></p>
+      </div>
+    </section>
+
+    <!-- features -->
+    <section class="section">
+      <h2>Features</h2>
+      <p class="lead">Everything needed to run a fair, fast poll.</p>
+      <div class="features">
+        <div class="card feature"><div class="icon">⚡</div><h3>Live results</h3>
+          <p>Every vote updates the bar chart on all connected screens straight away.</p></div>
+        <div class="card feature"><div class="icon">1</div><h3>One vote per user</h3>
+          <p>Each username can vote once per poll. A second attempt is rejected.</p></div>
+        <div class="card feature"><div class="icon">★</div><h3>Administrator control</h3>
+          <p>Only the administrator can create a poll, add options and close voting.</p></div>
+        <div class="card feature"><div class="icon">👥</div><h3>Who is online</h3>
+          <p>See the list of connected users update as people join and leave.</p></div>
+        <div class="card feature"><div class="icon">⏱</div><h3>Poll history</h3>
+          <p>Closed polls are kept with their final counts and winner, ready to download.</p></div>
+        <div class="card feature"><div class="icon">📱</div><h3>Any device</h3>
+          <p>Works on laptops and phones – just open the page in a browser.</p></div>
+      </div>
+    </section>
+
+    <!-- how it works -->
+    <section class="section" id="how">
+      <h2>How it works</h2>
+      <p class="lead">Four steps from question to result.</p>
+      <div class="steps">
+        <div class="card step"><h3>Log in</h3><p>Enter a username. The administrator also enters the admin password.</p></div>
+        <div class="card step"><h3>Create a poll</h3><p>The administrator types a question and 2–10 options and starts the poll.</p></div>
+        <div class="card step"><h3>Vote</h3><p>Everyone picks one option and submits. Results update for all users at once.</p></div>
+        <div class="card step"><h3>Close &amp; save</h3><p>The administrator closes the poll. The final result is saved in the history.</p></div>
+      </div>
+    </section>
+
+    <section class="card cta">
+      <h2>Ready to vote?</h2>
+      <p>Log in with any username to take part in the current poll.</p>
+      <a id="ctaBtn" class="btn primary" href="login.html">Get started</a>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/home.js"></script>
+</body>
+</html>
