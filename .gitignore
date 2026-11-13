@@ -1,0 +1,6 @@
+bin/
+out/
+data/polls.txt
+data/*.tmp
+*.class
+.settings/
