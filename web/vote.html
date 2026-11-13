@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vote – NetVote</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f6fde%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2213%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3ENV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <div class="whobar">
+      <h1>Current poll</h1>
+      <span id="whoText" class="muted"></span>
+    </div>
+    <p id="adminNote" class="hint hidden" style="margin:0 0 16px">The admin page is only for the administrator. You have been brought to the voting page.</p>
+
+    <div class="grid-3">
+      <!-- voting -->
+      <section class="card">
+        <h2>Your vote</h2>
+        <p id="pollStatus" class="pill">No poll</p>
+        <h3 id="question">No poll yet.</h3>
+        <div id="noPoll" class="empty">
+          <div class="big">🗳️</div>
+          Waiting for the administrator to start a poll…<br>This page updates by itself.
+        </div>
+        <form id="voteForm" class="hidden">
+          <div id="options" class="options"></div>
+          <button id="voteBtn" type="submit" class="primary" disabled>Submit Vote</button>
+        </form>
+        <p id="voteMsg" class="msg"></p>
+      </section>
+
+      <!-- live results -->
+      <section class="card">
+        <h2>Live results <span id="totalVotes" class="muted small"></span></h2>
+        <div id="results" class="results"><p class="muted">No results yet.</p></div>
+      </section>
+
+      <!-- users -->
+      <section class="card">
+        <h2>Online users <span id="userCount" class="muted small"></span></h2>
+        <ul id="users" class="users"></ul>
+      </section>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/vote.js"></script>
+</body>
+</html>

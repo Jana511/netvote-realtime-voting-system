@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About – NetVote</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f6fde%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2213%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3ENV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main class="about">
+    <div class="page-head">
+      <h1>About NetVote</h1>
+      <p>EC5205 Network Programming – group project.</p>
+    </div>
+
+    <div class="grid-2">
+      <section class="card">
+        <h2>The project</h2>
+        <p>NetVote is a real-time networked polling and voting system. An administrator creates a
+           poll with a question and several options, users vote from different computers or phones,
+           and every connected screen shows the updated results immediately.</p>
+        <p>The system follows the client–server model: only the server stores the poll and counts
+           the votes, so results are consistent for everyone and cannot be changed by a client.</p>
+      </section>
+
+      <section class="card">
+        <h2>Objectives</h2>
+        <ul>
+          <li>Let many clients connect to one server at the same time.</li>
+          <li>Allow exactly one vote per user per poll.</li>
+          <li>Send live result updates to all connected users.</li>
+          <li>Give the administrator control to create and close polls.</li>
+          <li>Keep working when a client disconnects, and save poll results.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="section">
+      <h2>Technologies</h2>
+      <div class="card">
+        <table class="simple">
+          <tr><th>Part</th><th>Technology</th><th>Status</th></tr>
+          <tr><td>Website (this site)</td><td>HTML5, CSS3, JavaScript</td><td>Complete</td></tr>
+          <tr><td>Backend</td><td>Java (JDK only) – built-in HTTP server, REST API with JSON, sessions, multithreaded request handling</td><td>Complete</td></tr>
+          <tr><td>Storage</td><td>Text file on the server (<code>data/polls.txt</code>) – every poll and vote</td><td>Complete</td></tr>
+          <tr><td>Networking</td><td>Java TCP sockets (<code>ServerSocket</code>), message protocol, instant push updates, LAN access</td><td>Next phase</td></tr>
+          <tr><td>Desktop client</td><td>Java Swing + <code>Socket</code></td><td>Next phase</td></tr>
+        </table>
+        <p class="small muted" style="margin:12px 0 0">All rules (one vote per user, admin-only actions,
+          validation) are checked by the Java backend, not by the browser.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Team</h2>
+      <!-- Edit the names and registration numbers below -->
+      <div class="team">
+        <div class="card member"><div class="avatar">M1</div><b>Member 1</b><span>Reg. No.</span></div>
+        <div class="card member"><div class="avatar">M2</div><b>Member 2</b><span>Reg. No.</span></div>
+        <div class="card member"><div class="avatar">M3</div><b>Member 3</b><span>Reg. No.</span></div>
+        <div class="card member"><div class="avatar">M4</div><b>Member 4</b><span>Reg. No.</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>NV.renderChrome("about");</script>
+</body>
+</html>

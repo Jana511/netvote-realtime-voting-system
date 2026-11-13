@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin – NetVote</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%232f6fde%22/%3E%3Ctext x=%2216%22 y=%2221%22 font-size=%2213%22 font-family=%22Arial%22 font-weight=%22bold%22 fill=%22white%22 text-anchor=%22middle%22%3ENV%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="site-header"></header>
+
+  <main>
+    <div class="page-head">
+      <h1>Administrator panel</h1>
+      <p>Create a poll, watch the votes arrive and close the poll when voting is finished.</p>
+    </div>
+
+    <div class="grid-2">
+      <!-- create poll -->
+      <section class="card">
+        <h2>Create a new poll</h2>
+        <form id="pollForm" novalidate>
+          <label>Question
+            <input id="newQuestion" type="text" maxlength="200" placeholder="Which day should we hold the club meeting?">
+          </label>
+          <label style="margin-bottom:4px">Options (2–10)</label>
+          <div id="optEditor" class="opt-editor"></div>
+          <div class="row" style="margin-bottom:16px">
+            <button id="addOpt" type="button" class="ghost">+ Add option</button>
+          </div>
+          <button id="startBtn" type="submit" class="primary">Start Poll</button>
+          <p id="createMsg" class="msg"></p>
+        </form>
+      </section>
+
+      <div class="stack">
+        <!-- current poll -->
+        <section class="card">
+          <h2>Current poll</h2>
+          <p id="pollStatus" class="pill">No poll</p>
+          <h3 id="question">No poll has been created yet.</h3>
+          <div class="stat-row">
+            <div class="stat"><b id="statVotes">0</b><span>votes</span></div>
+            <div class="stat"><b id="statUsers">0</b><span>users online</span></div>
+            <div class="stat leader"><b id="statLeader">–</b><span>leading</span></div>
+          </div>
+          <div id="results" class="results"></div>
+          <p class="small muted" style="margin:14px 0 0">Who has voted:</p>
+          <div id="voters" class="voter-list"><span>nobody yet</span></div>
+          <div class="row" style="margin-top:16px">
+            <button id="closeBtn" type="button" class="danger" disabled>Close Poll</button>
+            <a class="btn ghost" href="vote.html">Vote yourself</a>
+          </div>
+          <p id="closeMsg" class="msg"></p>
+        </section>
+
+        <!-- demo tools -->
+        <section class="card danger-zone">
+          <h2>Testing tools</h2>
+          <p class="small muted" style="margin:0 0 12px">For testing on one computer: add votes from imaginary users (names start with <code>demo_</code>), or delete every poll on the server.</p>
+          <div class="row">
+            <button id="demoVotes" type="button" class="ghost">Add 5 demo votes</button>
+            <button id="resetAll" type="button" class="ghost">Reset all data</button>
+          </div>
+          <p id="demoMsg" class="msg"></p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer id="site-footer"></footer>
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
