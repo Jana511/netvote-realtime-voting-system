@@ -16,6 +16,7 @@ import java.util.Map;
  * (application/x-www-form-urlencoded); every answer is JSON.
  *
  *   GET  /api/state         current poll, online users, and "me" (if logged in)
+ *   GET  /api/events        live updates (Server-Sent Events) - see EventStreamHandler
  *   GET  /api/history       closed polls, newest first
  *   POST /api/login         username, password (empty for voters)  -> {token, username, admin}
  *   POST /api/logout
@@ -64,7 +65,7 @@ public class ApiHandler implements HttpHandler {
     private String route(HttpExchange ex, String method, String path, SessionManager.Session me) throws IOException {
         if (method.equals("GET")) {
             switch (path) {
-                case "/api/state":   return state(me);
+                case "/api/state":   return stateJson(polls, sessions, me);
                 case "/api/history": return polls.historyJson();
                 default: throw new ApiException(404, "Unknown API address: " + path);
             }
@@ -73,7 +74,7 @@ public class ApiHandler implements HttpHandler {
         Map<String, String> form = readForm(ex);
 
         if (path.equals("/api/login")) {
-            SessionManager.Session s = sessions.login(form.get("username"), form.get("password"));
+            SessionManager.Session s = sessions.login(form.get("username"), form.get("password"), false);
             Main.log(s.username + (s.admin ? " (admin)" : "") + " logged in from " + ex.getRemoteAddress().getAddress().getHostAddress());
             return "{\"token\":" + Json.str(s.token) + ",\"username\":" + Json.str(s.username) + ",\"admin\":" + s.admin + "}";
         }
@@ -127,7 +128,8 @@ public class ApiHandler implements HttpHandler {
         }
     }
 
-    private String state(SessionManager.Session me) {
+    /** The full state for one user (also sent by EventStreamHandler as a live update). */
+    static String stateJson(PollService polls, SessionManager sessions, SessionManager.Session me) {
         StringBuilder sb = new StringBuilder("{");
         sb.append("\"poll\":").append(polls.currentJson(me != null && me.admin));
         sb.append(",\"users\":").append(Json.strings(sessions.onlineUsers()));
