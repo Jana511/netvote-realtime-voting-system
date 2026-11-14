@@ -8,8 +8,8 @@ import java.util.Map;
 
 /** One poll: question, options and the votes received (username -> option index). */
 public class Poll {
-    final int id;
-    final String question;
+    public final int id;
+    public final String question;
     final List<String> options;
     final String createdBy;
     final String createdAt;          // ISO date-time, e.g. 2026-11-12T13:16:05
@@ -33,5 +33,5 @@ public class Poll {
         return c;
     }
 
-    int total() { return votes.size(); }
+    public int total() { return votes.size(); }
 }
