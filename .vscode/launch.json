@@ -3,11 +3,32 @@
   "configurations": [
     {
       "type": "java",
-      "name": "NetVote backend",
+      "name": "1. NetVote Server (web 8080, TCP 5000)",
       "request": "launch",
       "mainClass": "backend.Main",
+      "projectName": "NetVote",
       "cwd": "${workspaceFolder}",
-      "args": "8080 admin123"
+      "args": "8080 admin123 5000",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "1b. NetVote Server (web 8081 - use if 8080 is busy)",
+      "request": "launch",
+      "mainClass": "backend.Main",
+      "projectName": "NetVote",
+      "cwd": "${workspaceFolder}",
+      "args": "8081 admin123 5000",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "java",
+      "name": "2. NetVote Desktop Client",
+      "request": "launch",
+      "mainClass": "client.ClientGUI",
+      "projectName": "NetVote",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole"
     }
   ]
 }
