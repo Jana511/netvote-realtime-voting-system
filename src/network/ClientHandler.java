@@ -184,9 +184,14 @@ public class ClientHandler implements Runnable, EventBus.Listener {
             if (voted >= 0 && voted != sentVoted) send(encode(VOTED, voted));
             sentVoted = voted;
 
-            List<Object> a = new ArrayList<>(Arrays.asList(p.id, p.total));
-            for (int c : p.counts) a.add(c);
-            String results = encode(RESULT_UPDATE, a.toArray());
+            String results;
+            if (polls.canSeeResults(me.username, me.admin)) {
+                List<Object> a = new ArrayList<>(Arrays.asList(p.id, p.total));
+                for (int c : p.counts) a.add(c);
+                results = encode(RESULT_UPDATE, a.toArray());
+            } else {
+                results = encode(RESULTS_HIDDEN, p.id, p.total);   // not voted yet: no counts sent
+            }
             if (!results.equals(sentResults)) { send(results); sentResults = results; }
         }
         String users = encode(USERS, sessions.onlineUsers().toArray());
