@@ -43,7 +43,7 @@
       st.className = "pill " + (p.active ? "open" : "closed");
       NV.$("curQuestion").textContent = p.question;
       NV.$("curMeta").textContent = NV.plural(p.total, "vote") + " · started by " + p.createdBy + " · " + NV.formatTime(p.createdAt) +
-        (p.total ? " · leading: " + NV.winnerText(p) : "");
+        (p.total && p.counts ? " · leading: " + NV.winnerText(p) : "");
     }
     NV.renderBars(NV.$("curBars"), p, s.me ? s.me.voted : -1);
 

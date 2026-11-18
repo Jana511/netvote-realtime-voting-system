@@ -5,6 +5,7 @@ EC5205 Network Programming project – **all networking code is Java** (JDK only
 - **Java desktop client** (Swing + `Socket`) – connects over TCP
 - **Java HTTP server** (JDK built-in, port **8080**) – serves the website, REST API and live push (Server-Sent Events)
 - Browsers and desktop clients share **one poll**: a vote from either appears on every screen at once
+- Results (counts and %) are shown only **after you vote** (the admin always sees them; everyone sees them once the poll is closed)
 
 Step-by-step explanation of the networking code, tests and viva points: **`NETWORKING_GUIDE.md`**.
 
@@ -128,5 +129,5 @@ run.bat / run-client.bat             start server / desktop client from a termin
 ```
 
 **TCP protocol (port 5000):** `LOGIN|user|pw`, `SUBMIT_VOTE|i`, `CREATE_POLL|q|a|b…`, `CLOSE_POLL`,
-`GET_POLL`, `PING`, `QUIT` → `WELCOME`, `LOGIN_OK`, `POLL`, `NO_POLL`, `RESULT_UPDATE`, `VOTE_ACCEPTED`,
+`GET_POLL`, `PING`, `QUIT` → `WELCOME`, `LOGIN_OK`, `POLL`, `NO_POLL`, `RESULT_UPDATE`, `RESULTS_HIDDEN`, `VOTE_ACCEPTED`,
 `VOTED`, `POLL_CLOSED`, `USERS`, `ERROR`, `PONG`.
