@@ -15,15 +15,42 @@ import java.util.Random;
  * The newest poll is the "current" poll (open or closed). Closed polls form the history.
  */
 public class PollService {
+    /** A read-only copy of the current poll, safe to use outside the lock (used by the TCP server). */
+    public static final class Snapshot {
+        public final int id, total;
+        public final String question;
+        public final boolean active;
+        public final List<String> options;
+        public final int[] counts;
+
+        Snapshot(Poll p) {
+            id = p.id; question = p.question; active = p.active;
+            options = p.options; counts = p.counts(); total = p.total();
+        }
+    }
+
     public static final int MIN_OPTIONS = 2, MAX_OPTIONS = 10, MAX_QUESTION = 200, MAX_OPTION = 80;
 
     private final Storage storage;
+    private final EventBus bus;
     private final List<Poll> polls;      // oldest first
     private final Random random = new Random();
 
-    PollService(Storage storage) {
+    PollService(Storage storage, EventBus bus) {
         this.storage = storage;
+        this.bus = bus;
         this.polls = storage.load();
+    }
+
+    /** Save to disk and tell every connected client that something changed. */
+    private void changed() {
+        storage.save(polls);
+        bus.publish();
+    }
+
+    public synchronized Snapshot snapshot() {
+        Poll p = current();
+        return p == null ? null : new Snapshot(p);
     }
 
     synchronized int pollCount() { return polls.size(); }
@@ -52,14 +79,14 @@ public class PollService {
         return sb.append(']').toString();
     }
 
-    synchronized int votedIndex(String username) {
+    public synchronized int votedIndex(String username) {
         Poll p = current();
         if (p == null || username == null) return -1;
         return p.votes.getOrDefault(username, -1);
     }
 
     // ---------------------------------------------------------------- admin actions
-    synchronized Poll createPoll(String admin, String question, List<String> rawOptions) {
+    public synchronized Poll createPoll(String admin, String question, List<String> rawOptions) {
         Poll cur = current();
         if (cur != null && cur.active) throw ApiException.conflict("Close the current poll before starting a new one.");
         question = question == null ? "" : question.trim();
@@ -81,23 +108,23 @@ public class PollService {
         int id = cur == null ? 1 : cur.id + 1;
         Poll p = new Poll(id, question, options, admin, now(), true, null);
         polls.add(p);
-        storage.save(polls);
+        changed();
         return p;
     }
 
-    synchronized Poll closePoll() {
+    public synchronized Poll closePoll() {
         Poll p = current();
         if (p == null || !p.active) throw ApiException.conflict("There is no active poll to close.");
         p.active = false;
         p.closedAt = now();
-        storage.save(polls);
+        changed();
         return p;
     }
 
     /** Deletes every poll and the history. */
     synchronized void resetAll() {
         polls.clear();
-        storage.save(polls);
+        changed();
     }
 
     /** Testing helper: votes from imaginary users, so charts can be shown with one computer. */
@@ -115,18 +142,18 @@ public class PollService {
             added++;
         }
         if (added == 0) throw ApiException.conflict("All demo voters have already voted.");
-        storage.save(polls);
+        changed();
         return added;
     }
 
     // ---------------------------------------------------------------- voter action
-    synchronized void vote(String username, int index) {
+    public synchronized void vote(String username, int index) {
         Poll p = current();
         if (p == null || !p.active) throw ApiException.conflict("There is no active poll. Voting is closed.");
         if (index < 0 || index >= p.options.size()) throw ApiException.badRequest("Invalid option.");
         if (p.votes.containsKey(username)) throw ApiException.conflict("You have already voted in this poll.");
         p.votes.put(username, index);
-        storage.save(polls);
+        changed();
     }
 
     private static String now() { return LocalDateTime.now().withNano(0).toString(); }

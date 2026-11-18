@@ -7,14 +7,17 @@
    this file never decides anything by itself.
 
      login        POST /api/login         logout   POST /api/logout
+     (live)       GET  /api/events  - Server-Sent Events stream
      getState     GET  /api/state         vote     POST /api/vote
      getHistory   GET  /api/history       createPoll POST /api/polls
      closePoll    POST /api/polls/close   addDemoVotes POST /api/demo-votes
      resetAll     POST /api/reset
 
-   Live updates: subscribe() asks the server for the state every 2 seconds and
-   calls the page again when something changed. (In the networking phase this
-   can be replaced by the server pushing updates instantly.)
+   Live updates: subscribe() opens ONE long-lived connection to
+   GET /api/events (Server-Sent Events). The server pushes the new state the
+   moment anything changes - a vote from a browser OR from a desktop client.
+   If the connection drops, the browser reconnects by itself. (Very old
+   browsers without EventSource fall back to asking every 2 seconds.)
 
    The "state" object every page receives:
    {
@@ -85,24 +88,37 @@
 
   // ---------------------------------------------------------------- live updates
   const listeners = new Set();
-  let lastJson = null, lastState = null, timer = null;
+  let lastJson = null, lastState = null, timer = null, stream = null;
 
-  async function refresh() {
-    let s;
-    try {
-      s = await api("GET", "/api/state");
-    } catch (e) {
-      return lastState;          // server down: keep showing the last data
-    }
-    if (getSession() && !s.me) { sessionEnded(); return s; }   // server forgot this login
+  /** A new state arrived (pushed by the server, or fetched): update every page part. */
+  function handleState(s) {
+    if (getSession() && !s.me) { sessionEnded(); return; }    // server forgot this login
     const json = JSON.stringify(s);
-    if (json !== lastJson) {
-      lastJson = json;
-      lastState = s;
-      listeners.forEach((cb) => { try { cb(s); } catch (e) { console.error(e); } });
-    }
-    return s;
+    if (json === lastJson) return;
+    lastJson = json;
+    lastState = s;
+    listeners.forEach((cb) => { try { cb(s); } catch (e) { console.error(e); } });
   }
+
+  /** Ask once (used at start and right after our own actions). */
+  async function refresh() {
+    try {
+      handleState(await api("GET", "/api/state"));
+    } catch (e) { /* server down: keep showing the last data */ }
+    return lastState;
+  }
+
+  /** Open the live connection: the server pushes "state" events into it. */
+  function startLiveUpdates() {
+    if (FILE_MODE || stream || timer) return;
+    if (!window.EventSource) { timer = setInterval(refresh, REFRESH_MS); return; }
+    const s = getSession();
+    stream = new EventSource("/api/events" + (s ? "?token=" + encodeURIComponent(s.token) : ""));
+    stream.addEventListener("state", (e) => { setOnline(true); handleState(JSON.parse(e.data)); });
+    stream.onopen = () => setOnline(true);
+    stream.onerror = () => setOnline(false);   // EventSource reconnects automatically
+  }
+  window.addEventListener("beforeunload", () => { if (stream) stream.close(); });
 
   // ======================================================================
   //                         PUBLIC FUNCTIONS
@@ -124,6 +140,7 @@
     },
 
     async logout() {
+      if (stream) { stream.close(); stream = null; }
       try { await api("POST", "/api/logout", {}); } catch (e) { /* log out locally anyway */ }
       setSession(null);
     },
@@ -137,7 +154,7 @@
       listeners.add(callback);
       if (lastState) setTimeout(() => callback(lastState), 0);
       else refresh();
-      if (!timer && !FILE_MODE) timer = setInterval(refresh, REFRESH_MS);
+      startLiveUpdates();
       return () => listeners.delete(callback);
     },
 

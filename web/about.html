@@ -43,14 +43,16 @@
       <div class="card">
         <table class="simple">
           <tr><th>Part</th><th>Technology</th><th>Status</th></tr>
-          <tr><td>Website (this site)</td><td>HTML5, CSS3, JavaScript</td><td>Complete</td></tr>
-          <tr><td>Backend</td><td>Java (JDK only) – built-in HTTP server, REST API with JSON, sessions, multithreaded request handling</td><td>Complete</td></tr>
+          <tr><td>Website (this site)</td><td>HTML5, CSS3, JavaScript (Fetch API, EventSource)</td><td>Complete</td></tr>
+          <tr><td>Backend</td><td>Java (JDK only) – built-in HTTP server, REST API with JSON, sessions</td><td>Complete</td></tr>
+          <tr><td>Networking – desktop</td><td>Java TCP sockets: <code>ServerSocket</code> on port 5000, one thread per client, text message protocol, heartbeat</td><td>Complete</td></tr>
+          <tr><td>Networking – web</td><td>Server-Sent Events: the server pushes every change to open pages instantly</td><td>Complete</td></tr>
+          <tr><td>Desktop client</td><td>Java Swing + <code>Socket</code>, background listener thread</td><td>Complete</td></tr>
           <tr><td>Storage</td><td>Text file on the server (<code>data/polls.txt</code>) – every poll and vote</td><td>Complete</td></tr>
-          <tr><td>Networking</td><td>Java TCP sockets (<code>ServerSocket</code>), message protocol, instant push updates, LAN access</td><td>Next phase</td></tr>
-          <tr><td>Desktop client</td><td>Java Swing + <code>Socket</code></td><td>Next phase</td></tr>
         </table>
-        <p class="small muted" style="margin:12px 0 0">All rules (one vote per user, admin-only actions,
-          validation) are checked by the Java backend, not by the browser.</p>
+        <p class="small muted" style="margin:12px 0 0">Browsers and desktop clients share the same poll:
+          a vote from either appears on every screen at once. All rules (one vote per user, admin-only
+          actions, validation) are checked by the Java server, never by the client.</p>
       </div>
     </section>
 
