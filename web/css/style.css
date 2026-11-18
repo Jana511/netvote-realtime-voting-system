@@ -216,6 +216,10 @@ textarea { resize: vertical; }
 .bar-row.winner .bar-head span:first-child { font-weight: 700; }
 .bar-track { height: 16px; background: #eef1f6; border-radius: 8px; overflow: hidden; }
 .bar-fill { height: 100%; border-radius: 8px; width: 0; transition: width 0.5s ease; }
+.results-hidden { text-align: center; padding: 18px 8px; color: var(--muted); display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.results-hidden .big { font-size: 1.8rem; }
+.results-hidden b { color: inherit; }
+.hero .results-hidden { color: #d5ddef; }
 .stat-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
 .stat { background: #f6f8fc; border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; min-width: 110px; }
 .stat b { display: block; font-size: 1.3rem; }

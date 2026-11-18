@@ -131,6 +131,15 @@ NV.renderBars = function (box, poll, mark) {
     box.innerHTML = '<p class="muted">No results yet.</p>';
     return;
   }
+  // The server sends counts: null until this user has voted (or the poll is closed).
+  if (!poll.counts) {
+    box.dataset.key = "";
+    const loggedIn = !!NetVoteData.currentUser();
+    box.innerHTML = '<div class="results-hidden"><div class="big">🔒</div><b></b><span></span></div>';
+    box.querySelector("b").textContent = loggedIn ? "Results are shown after you vote." : "Log in and vote to see the results.";
+    box.querySelector("span").textContent = NV.plural(poll.total, "vote") + " so far";
+    return;
+  }
   // Build the rows only when the poll changes; afterwards just update them,
   // so the bars slide smoothly from the old value to the new one.
   const key = poll.id + ":" + JSON.stringify(poll.options);
@@ -161,6 +170,7 @@ NV.renderBars = function (box, poll, mark) {
 /** Names of the leading option(s), e.g. "Java" or "Java & Python (tie)". */
 NV.winnerText = function (poll) {
   if (!poll || !poll.total) return "No votes";
+  if (!poll.counts) return "Hidden until you vote";
   const max = Math.max(...poll.counts);
   const top = poll.options.filter((_, i) => poll.counts[i] === max);
   return top.length === 1 ? top[0] : top.join(" & ") + " (tie)";

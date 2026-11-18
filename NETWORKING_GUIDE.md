@@ -70,6 +70,7 @@ decode("POLL|1|Best day?|1|Mon|Wed")  →  ["POLL","1","Best day?","1","Mon","We
 | `WELCOME|…` · `LOGIN_OK|kasun|0` | connected · logged in (1 = admin) |
 | `POLL|id|question|1|opt1|opt2…` · `NO_POLL` | the current poll (1 = open, 0 = closed) |
 | `RESULT_UPDATE|id|total|c1|c2…` | live counts |
+| `RESULTS_HIDDEN|id|total` | you have not voted yet: only the total is sent, not the counts |
 | `VOTE_ACCEPTED|i` · `VOTED|i` | your vote was counted / you voted earlier |
 | `POLL_CLOSED|id` · `USERS|a|b|c` | poll ended · who is online (desktop + web) |
 | `ERROR|message` · `PONG` | request refused · heartbeat answer |
@@ -260,6 +261,8 @@ The server console logs every connection, login, vote and disconnect with a time
 - **Message framing:** newline-terminated lines plus escaping, because TCP has no message boundaries.
 - **Push vs polling:** the server pushes changes (TCP messages, Server-Sent Events) instead of
   clients asking repeatedly. This means less traffic and instant updates.
+- **Results privacy:** counts and percentages are sent only to users who have voted, to the admin,
+  or to everyone after the poll closes (`PollService.canSeeResults`). Hidden on the server, not only on screen.
 - **Fault tolerance:** heartbeat (`PING`/`PONG`) + read timeout, `finally` clean-up, automatic
   browser reconnect, and data saved to a file after every change.
 - **Two protocols, one system:** the TCP text protocol for the desktop app and HTTP/SSE for

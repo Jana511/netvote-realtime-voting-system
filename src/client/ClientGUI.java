@@ -251,6 +251,9 @@ public class ClientGUI extends JFrame implements VoteClient.Listener {
                 if (counts.length == options.size()) results.setData(options, counts);
                 break;
             }
+            case RESULTS_HIDDEN:
+                results.setHidden(options, Integer.parseInt(m[2]));   // vote first to see the results
+                break;
             case POLL_CLOSED:
                 pollActive = false;
                 statusLabel.setText("The poll has been closed.");
@@ -325,10 +328,19 @@ public class ClientGUI extends JFrame implements VoteClient.Listener {
         };
         private List<String> options = new ArrayList<>();
         private int[] counts = new int[0];
+        private int hiddenTotal = -1;                 // >= 0: results hidden until this user votes
 
         void setData(List<String> options, int[] counts) {
             this.options = new ArrayList<>(options);
             this.counts = counts;
+            this.hiddenTotal = -1;
+            repaint();
+        }
+
+        void setHidden(List<String> options, int total) {
+            this.options = new ArrayList<>(options);
+            this.counts = new int[0];
+            this.hiddenTotal = total;
             repaint();
         }
 
@@ -337,6 +349,13 @@ public class ClientGUI extends JFrame implements VoteClient.Listener {
             super.paintComponent(g0);
             Graphics2D g = (Graphics2D) g0.create();
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            if (hiddenTotal >= 0 && !options.isEmpty()) {
+                Insets in = getInsets();
+                g.drawString("Results are shown after you vote.", in.left + 12, in.top + 20);
+                g.drawString("Votes so far: " + hiddenTotal, in.left + 12, in.top + 40);
+                g.dispose();
+                return;
+            }
             if (options.isEmpty() || counts.length != options.size()) {
                 g.drawString("No results yet.", getInsets().left + 12, getInsets().top + 20);
                 g.dispose();
