@@ -131,7 +131,7 @@ public class ApiHandler implements HttpHandler {
     /** The full state for one user (also sent by EventStreamHandler as a live update). */
     static String stateJson(PollService polls, SessionManager sessions, SessionManager.Session me) {
         StringBuilder sb = new StringBuilder("{");
-        sb.append("\"poll\":").append(polls.currentJson(me != null && me.admin));
+        sb.append("\"poll\":").append(polls.currentJson(me == null ? null : me.username, me != null && me.admin));
         sb.append(",\"users\":").append(Json.strings(sessions.onlineUsers()));
         sb.append(",\"me\":");
         if (me == null) sb.append("null");

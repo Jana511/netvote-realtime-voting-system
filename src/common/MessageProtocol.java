@@ -28,7 +28,8 @@ import java.util.List;
  *   LOGIN_OK|username|1 or 0 (admin)
  *   POLL|id|question|1 or 0 (open)|opt1|opt2|...
  *   NO_POLL
- *   RESULT_UPDATE|pollId|totalVotes|count1|count2|...
+ *   RESULT_UPDATE|pollId|totalVotes|count1|count2|...   only after you voted (or poll closed / admin)
+ *   RESULTS_HIDDEN|pollId|totalVotes       you have not voted yet: counts are not sent
  *   VOTED|optionIndex                      you voted for this option earlier
  *   VOTE_ACCEPTED|optionIndex
  *   POLL_CLOSED|pollId
@@ -54,6 +55,7 @@ public final class MessageProtocol {
     public static final String POLL = "POLL";
     public static final String NO_POLL = "NO_POLL";
     public static final String RESULT_UPDATE = "RESULT_UPDATE";
+    public static final String RESULTS_HIDDEN = "RESULTS_HIDDEN";
     public static final String VOTED = "VOTED";
     public static final String VOTE_ACCEPTED = "VOTE_ACCEPTED";
     public static final String POLL_CLOSED = "POLL_CLOSED";

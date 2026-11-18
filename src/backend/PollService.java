@@ -67,15 +67,26 @@ public class PollService {
         return h;
     }
 
-    /** JSON of the current poll, built while holding the lock so no vote can change it half-way. */
-    synchronized String currentJson(boolean includeVoters) {
-        return Json.poll(current(), includeVoters);
+    /**
+     * RULE: the counts and percentages of the current poll are shown only to
+     * someone who has already voted, to the administrator, or to everyone once
+     * the poll is closed. So nobody's vote is influenced by the results.
+     */
+    public synchronized boolean canSeeResults(String username, boolean admin) {
+        Poll p = current();
+        if (p == null) return false;
+        return admin || !p.active || (username != null && p.votes.containsKey(username));
+    }
+
+    /** JSON of the current poll for one viewer, built while holding the lock. */
+    synchronized String currentJson(String username, boolean admin) {
+        return Json.poll(current(), admin, canSeeResults(username, admin));
     }
 
     synchronized String historyJson() {
         StringBuilder sb = new StringBuilder("[");
         List<Poll> h = history();
-        for (int i = 0; i < h.size(); i++) sb.append(i > 0 ? "," : "").append(Json.poll(h.get(i), false));
+        for (int i = 0; i < h.size(); i++) sb.append(i > 0 ? "," : "").append(Json.poll(h.get(i), false, true));   // closed polls: always visible
         return sb.append(']').toString();
     }
 

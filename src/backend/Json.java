@@ -43,14 +43,15 @@ final class Json {
     /**
      * A poll as JSON. Who voted is only included when includeVoters is true
      * (for the administrator); which option each person chose is never sent.
+     * The vote counts are only included when showCounts is true (see PollService.canSeeResults).
      */
-    static String poll(Poll p, boolean includeVoters) {
+    static String poll(Poll p, boolean includeVoters, boolean showCounts) {
         if (p == null) return "null";
         StringBuilder sb = new StringBuilder("{");
         sb.append("\"id\":").append(p.id)
           .append(",\"question\":").append(str(p.question))
           .append(",\"options\":").append(strings(p.options))
-          .append(",\"counts\":").append(ints(p.counts()))
+          .append(",\"counts\":").append(showCounts ? ints(p.counts()) : "null")   // null = hidden until you vote
           .append(",\"total\":").append(p.total())
           .append(",\"active\":").append(p.active)
           .append(",\"createdBy\":").append(str(p.createdBy))
